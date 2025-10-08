@@ -1,26 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Button, Image, TouchableOpacity } from 'react-native';
-import { Link, useRouter, useLocalSearchParams } from 'expo-router';
 import { FontAwesome } from '@expo/vector-icons';
-
-const avatarImages = {
-  avatar1: require('../../../assets/images/avatar/10f13510774061.560eadfde5b61.png'),
-  avatar2: require('../../../assets/images/avatar/322790.jpg'),
-  avatar3: require('../../../assets/images/avatar/f495741d749f713e849e305c60df60e5.jpg'),
-  avatar4: require('../../../assets/images/avatar/images.png'),
-};
+import { Link, useLocalSearchParams, useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function SettingsScreen() {
   const [pseudo, setPseudo] = useState('admin');
-  const [avatar, setAvatar] = useState(avatarImages.avatar1);
+  const [avatar, setAvatar] = useState(null); // Use null for initial state
   const router = useRouter();
   const params = useLocalSearchParams();
 
   useEffect(() => {
-    if (params.avatarId && avatarImages[params.avatarId]) {
-      setAvatar(avatarImages[params.avatarId]);
+    if (params.avatarUri) {
+      setAvatar(params.avatarUri);
     }
-  }, [params.avatarId]);
+  }, [params.avatarUri]);
 
   const handleEditPicture = () => {
     router.push('/(tabs)/settings/select-avatar');
@@ -30,7 +23,11 @@ export default function SettingsScreen() {
     <View style={styles.container}>
         <View style={styles.profileContainer}>
             <View style={styles.profileImageContainer}>
-                <Image source={avatar} style={styles.profileImage} />
+                <Image 
+                  // Use a placeholder if avatar is null or an empty string
+                  source={avatar ? { uri: avatar } : require('../../../assets/images/avatar/10f13510774061.560eadfde5b61.png')} 
+                  style={styles.profileImage} 
+                />
                 <TouchableOpacity style={styles.editButton} onPress={handleEditPicture}>
                     <FontAwesome name="pencil" size={20} color="white" />
                 </TouchableOpacity>
