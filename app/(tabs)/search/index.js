@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, FlatList, ActivityIndicator, Button, Text, StyleSheet, useWindowDimensions } from 'react-native';
+import { View, FlatList, ActivityIndicator, Text, StyleSheet, useWindowDimensions } from 'react-native';
 import { useSearchCardsQuery } from '../../../api/pokemon';
 import Search from '../../../components/Search';
 import Card from '../../../components/Card';
@@ -32,26 +32,10 @@ export default function SearchScreen() {
 
   const { cards, paging } = data || {};
 
-  const renderPagination = () => {
-    if (!cards || cards.length === 0 || (isFetching && !data)) return null;
-
-    return (
-      <View style={styles.pagination}>
-        <Button 
-          title="Previous" 
-          onPress={() => setPage(p => Math.max(1, p - 1))} 
-          disabled={page === 1 || isFetching}
-        />
-        <Text style={styles.pageText}>
-          {paging ? `Page ${page} of ${paging.total}` : `Page ${page}`}
-        </Text>
-        <Button 
-          title="Next" 
-          onPress={() => setPage(p => p + 1)} 
-          disabled={isFetching || (paging && page === paging.total)}
-        />
-      </View>
-    );
+  const loadMore = () => {
+    if (!isFetching && paging && page < paging.total) {
+      setPage(p => p + 1);
+    }
   };
 
   return (
@@ -73,13 +57,13 @@ export default function SearchScreen() {
           renderItem={({ item }) => <Card card={item} />}
           keyExtractor={(item) => item.id}
           numColumns={numColumns}
+          onEndReached={loadMore}
+          onEndReachedThreshold={0.5}
           ListFooterComponent={isFetching && data ? <ActivityIndicator style={{ margin: 10 }} /> : null}
         />
       ) : (
         searchTerm && !isFetching && <Text style={styles.messageText}>No results for "{searchTerm}"</Text>
       )}
-
-      {renderPagination()}
     </View>
   );
 }
@@ -88,13 +72,4 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'white' },
   loader: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   messageText: { textAlign: 'center', marginTop: 20, fontSize: 16 },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderTopColor: '#eee',
-  },
-  pageText: { fontSize: 16, fontWeight: 'bold' },
 });
