@@ -3,19 +3,17 @@ import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react
 import { useRouter } from 'expo-router';
 
 const avatars = [
-  'https://via.placeholder.com/150/FF0000/FFFFFF?Text=Avatar1',
-  'https://via.placeholder.com/150/00FF00/FFFFFF?Text=Avatar2',
-  'https://via.placeholder.com/150/0000FF/FFFFFF?Text=Avatar3',
-  'https://via.placeholder.com/150/FFFF00/000000?Text=Avatar4',
-  'https://via.placeholder.com/150/FF00FF/FFFFFF?Text=Avatar5',
-  'https://via.placeholder.com/150/00FFFF/000000?Text=Avatar6',
+  { id: 'avatar1', source: require('../../../assets/images/avatar/10f13510774061.560eadfde5b61.png') },
+  { id: 'avatar2', source: require('../../../assets/images/avatar/322790.jpg') },
+  { id: 'avatar3', source: require('../../../assets/images/avatar/f495741d749f713e849e305c60df60e5.jpg') },
+  { id: 'avatar4', source: require('../../../assets/images/avatar/images.png') },
 ];
 
 export default function SelectAvatarScreen() {
   const router = useRouter();
 
-  const handleSelectAvatar = (avatarUri) => {
-    router.push({ pathname: '/(tabs)/settings', params: { avatarUri } });
+  const handleSelectAvatar = (avatarId) => {
+    router.push({ pathname: '/(tabs)/settings', params: { avatarId } });
   };
 
   return (
@@ -23,11 +21,11 @@ export default function SelectAvatarScreen() {
       <Text style={styles.title}>Select an Avatar</Text>
       <FlatList
         data={avatars}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => item.id}
         numColumns={3}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleSelectAvatar(item)} style={styles.avatarContainer}>
-            <Image source={{ uri: item }} style={styles.avatar} />
+          <TouchableOpacity onPress={() => handleSelectAvatar(item.id)} style={styles.avatarContainer}>
+            <Image source={item.source} style={styles.avatar} />
           </TouchableOpacity>
         )}
       />
