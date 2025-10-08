@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, ActivityIndicator, Text, StyleSheet, useWindowDimensions } from 'react-native';
-import { useSearchCardsQuery } from '../../../api/pokemon';
-import Search from '../../../components/Search';
-import Card from '../../../components/Card';
+import { useSearchCardsQuery } from '@/api/pokemon';
+import Search from '@/components/Search';
+import Card from '@/components/Card';
 
 const CARD_TARGET_WIDTH = 180;
 

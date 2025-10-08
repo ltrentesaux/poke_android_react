@@ -58,6 +58,7 @@ export default function CardDetailScreen() {
         options={{ 
           title: card.name, 
           headerBackTitle: 'Back',
+          headerBackVisible: true,
           headerRight: () => (
             <TouchableOpacity onPress={toggleFavorite} style={{ marginRight: 15 }}>
               <FontAwesome 

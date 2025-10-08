@@ -1,31 +1,24 @@
+import React from 'react';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-
-const avatars = [
-  { id: 'avatar1', source: require('../../../assets/images/avatar/10f13510774061.560eadfde5b61.png') },
-  { id: 'avatar2', source: require('../../../assets/images/avatar/322790.jpg') },
-  { id: 'avatar3', source: require('../../../assets/images/avatar/f495741d749f713e849e305c60df60e5.jpg') },
-  { id: 'avatar4', source: require('../../../assets/images/avatar/images.png') },
-];
+import { avatarArray } from '../../../utils/avatars';
 
 export default function SelectAvatarScreen() {
   const router = useRouter();
 
-  const handleSelectAvatar = (avatarSource) => {
-    // Resolve the asset to get a URI that can be passed as a param
-    const resolvedAsset = Image.resolveAssetSource(avatarSource);
-    router.push({ pathname: '/(tabs)/settings', params: { avatarUri: resolvedAsset.uri } });
+  const handleSelectAvatar = (avatarId) => {
+    router.push({ pathname: '/(tabs)/settings', params: { avatarId } });
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Select an Avatar</Text>
       <FlatList
-        data={avatars}
+        data={avatarArray}
         keyExtractor={(item) => item.id}
         numColumns={3}
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => handleSelectAvatar(item.source)} style={styles.avatarContainer}>
+          <TouchableOpacity onPress={() => handleSelectAvatar(item.id)} style={styles.avatarContainer}>
             <Image source={item.source} style={styles.avatar} />
           </TouchableOpacity>
         )}

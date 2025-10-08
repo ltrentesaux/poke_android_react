@@ -49,7 +49,7 @@ const Card = ({ card, onFavoriteChange }) => {
   };
 
   const handleCardPress = () => {
-    router.push(`/cards/${cardId}`);
+    router.push(`/(tabs)/cards/${cardId}`);
   };
 
   return (
